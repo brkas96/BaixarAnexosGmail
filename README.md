@@ -22,4 +22,4 @@
  -Baixe o credentials.json e coloque na mesma pasta do programa
  -Inicie o programa e adicione sua primeira conta Gmail fazendo login pelo navegador
 
-# Documentação da API: https://developers.google.com/gmail/api/guides?hl=pt-br
+Documentação da API: https://developers.google.com/gmail/api/guides?hl=pt-br
