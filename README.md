@@ -15,11 +15,11 @@ Apoie este projeto: [![Patrocine este projeto](https://img.shields.io/badge/-Spo
  Mais funcionalidades seram implementadas ao longo do tempo.
 
 # COMO USAR
- -Primeiro você deve fazer login em: https://console.cloud.google.com/apis/library
- -Crie um projeto
- -Ative a API do Gmail para o seu projeto
- -Crie o arquivo credentials.json
- -Baixe o credentials.json e coloque na mesma pasta do programa
- -Inicie o programa e adicione sua primeira conta Gmail fazendo login pelo navegador
+-Primeiro você deve fazer login em: https://console.cloud.google.com/apis/library
+-Crie um projeto
+-Ative a API do Gmail para o seu projeto
+-Crie o arquivo credentials.json
+-Baixe o credentials.json e coloque na mesma pasta do programa
+-Inicie o programa e adicione sua primeira conta Gmail fazendo login pelo navegador
 
 Documentação da API: https://developers.google.com/gmail/api/guides?hl=pt-br
