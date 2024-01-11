@@ -2,6 +2,8 @@
 
 Apoie este projeto: [![Patrocine este projeto](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/BrunoBenvenutti)
 
+Feedback: brkas_dev@proton.me
+
 # SOBRE (ABOUT)
 
 -Esta automação foi desenvolvida e testada no Windows 10
