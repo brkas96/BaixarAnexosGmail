@@ -33,6 +33,8 @@ RESPONSABILIDADE, SEJA EM AÇÃO DE CONTRATO, DELITO OU DE OUTRA FORMA, DECORREN
 PROGRAMA OU O USO OU OUTRAS NEGOCIAÇÕES NO PROGRAMA.
 """
 
+# contact: brkas_dev@proton.me
+
 # Configurações
 user = Path.home()
 SCOPES = ['https://mail.google.com/']  # Acesso total ao Gmail do usuário
