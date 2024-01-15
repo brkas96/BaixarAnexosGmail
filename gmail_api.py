@@ -14,7 +14,7 @@ from urllib.request import urlopen
 import ctypes
 
 """
-Auto downloader de anexos para Gmail - Versão 1.2.1
+Auto downloader de anexos para Gmail - Versão 1.2.2
 
 Copyright (c) 2024 Bruno Benvenutti
 
@@ -262,7 +262,7 @@ def baixar_anexos(service, user_id, message_id, diretorio):
             relatorio.write(f"Erro ao baixar anexo: {e}\n")
             relatorio.write(f"Data e hora do erro: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
             relatorio.write(f"E-mail ID: {detalhes_email['id']}\n")
-            relatorio.write("------------------------------------------------------------------------\n")
+            relatorio.write(125 * len("-"), "\n")
             relatorio.write("")
 
         c = checar_conexao()
@@ -429,14 +429,22 @@ def ler_config(parametro):
 def escrever_config(p1, p2):
     try:
         with open(SAVE_DIR, 'r') as config:
-            d = config.readlines()
+            linhas = config.readlines()
     except FileNotFoundError:
-        return []
+        return
 
-    d.append(f'{p1}={p2}\n')
+    encontrado = False
+    for i, linha in enumerate(linhas):
+        if linha.startswith(f"{p1}="):
+            linhas[i] = f"{p1}={p2}\n"
+            encontrado = True
+            break
+
+    if not encontrado:
+        linhas.append(f"{p1}={p2}\n")
 
     with open(SAVE_DIR, 'w') as config:
-        config.writelines(d)
+        config.writelines(linhas)
 
 def calcular_diferenca():
     data_str1 = datetime.now().date().strftime("%Y-%m-%d")
@@ -560,30 +568,32 @@ def main():
 
                     try:
                         while True:
-                            verificar_data = comparar_datas(data_hoje)  # Retorna True se as datas forem diferentes
-
-                            if verificar_data:
-                                data_hoje = datetime.now().date()
-                                folder = pasta_hoje_path(data_hoje)
-                                print(f"Δ Criando pasta para data {data_hoje}")
-                                pasta_hoje = criando_pasta_hoje(folder)
-                                diretorio_hoje = folder
-                                time.sleep(10)
-                                if pasta_hoje:
-                                    print(f"Δ Pasta de hoje criada com sucesso: {folder}")
-                                    time.sleep(10)
-                                else:
-                                    diretorio_hoje = SAVE_DIR
-                                    print("Δ Houve algum erro ao criar a pasta do dia de hoje.\n"
-                                          f"Δ Salvando no diretório: {diretorio_hoje}\n")
-                                    time.sleep(6)
 
                             messages = filtro(service)
 
                             if not messages:
                                 print("Δ Não foram encontrados emails não lidos no dia de hoje.")
                                 print("")
-                                contador_segundos(60, f"para adquirir nova "
+
+                                verificar_data = comparar_datas(data_hoje)  # Retorna True se as datas forem diferentes
+
+                                if verificar_data:
+                                    data_hoje = datetime.now().date()
+                                    folder = pasta_hoje_path(data_hoje)
+                                    print(f"Δ Criando pasta para data {data_hoje}")
+                                    pasta_hoje = criando_pasta_hoje(folder)
+                                    diretorio_hoje = folder
+                                    time.sleep(10)
+                                    if pasta_hoje:
+                                        print(f"Δ Pasta de hoje criada com sucesso: {folder}")
+                                        time.sleep(10)
+                                    else:
+                                        diretorio_hoje = SAVE_DIR
+                                        print("Δ Houve algum erro ao criar a pasta do dia de hoje.\n"
+                                              f"Δ Salvando no diretório: {diretorio_hoje}\n")
+                                        time.sleep(6)
+
+                                contador_segundos(30, f"para adquirir nova "
                                                       f"lista de emails na conta: {nome_arquivo}")
 
                                 n += 1
