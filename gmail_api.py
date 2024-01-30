@@ -126,13 +126,11 @@ def gerar_token():
 
     return creds
 
-
 def obter_email(credentials):
     service = build('gmail', 'v1', credentials=credentials)
     info_conta = service.users().getProfile(userId='me').execute()
     email = info_conta.get('emailAddress')
     return email
-
 
 def listar_contas():
     diretorio = os.getcwd()
@@ -144,7 +142,6 @@ def listar_contas():
 
     contas = arquivos_com_palavra
     return contas
-
 
 def verificar_conta(arquivo_escolhido):
     creds = None
@@ -380,11 +377,9 @@ def checar_conexao():
     except urllib.error.URLError:
         return False
 
-
 def reiniciar_programa():
     python = sys.executable
     os.execl(python, python, *sys.argv)
-
 
 def contador_segundos(tempo_total, texto):
     for segundos in range(tempo_total, 0, -1):
@@ -407,13 +402,14 @@ def limpar_inbox(service):
                 service.users().messages().delete(userId='me', id=message['id']).execute()
                 print(f"Δ Mensagem excluida com sucesso. Message ID: {message['id']}")
                 time.sleep(2)
-                return True
             except Exception as e:
-                print(f"Δ Erro ao limpar Caixa de entrada: {e}")
+                print(f"Δ Erro ao limpar Caixa de entrada: {e}, message id: {message['id']}")
+                time.sleep(3)
     else:
         print("Δ Não foram encontrados emails a serem excluidos.")
         print("")
         time.sleep(3)
+        return False
 
 def ler_config(parametro):
     # Formato do parametro 'texto='
@@ -457,7 +453,6 @@ def calcular_diferenca():
     except Exception as e:
         print(f"Erro em calcular_diferenca(): {e}")
     return dif_date
-
 
 def main():
     # Configuração do logger que é uma biblioteca para salvar erros em um arquivo para que eu possa consultar depois
@@ -561,37 +556,37 @@ def main():
                         clear = limpar_inbox(service)
                         if clear:
                             print(f"Δ Caixa de entrada de {nome_arquivo} foi limpa.")
-                            # atualizar o auto_clear_date para a data de hoje
+                            # atualiza o auto_clear_date para a data de hoje
                             escrever_config('auto_clear_date', datetime.now().date())
                     else:
                         pass
 
                     try:
                         while True:
+                            verificar_data = comparar_datas(data_hoje)  # Retorna True se as datas forem diferentes
 
+                            if verificar_data:
+                                data_hoje = datetime.now().date()
+                                folder = pasta_hoje_path(data_hoje)
+                                print(f"Δ Criando pasta para data {data_hoje}")
+                                pasta_hoje = criando_pasta_hoje(folder)
+                                diretorio_hoje = folder
+                                time.sleep(10)
+                                if pasta_hoje:
+                                    print(f"Δ Pasta de hoje criada com sucesso: {folder}")
+                                    time.sleep(10)
+                                else:
+                                    diretorio_hoje = SAVE_DIR
+                                    print("Δ Houve algum erro ao criar a pasta do dia de hoje.\n"
+                                          f"Δ Salvando no diretório: {diretorio_hoje}\n")
+                                    time.sleep(6)
+
+                            # Pesquisar novos e-mails
                             messages = filtro(service)
 
                             if not messages:
                                 print("Δ Não foram encontrados emails não lidos no dia de hoje.")
                                 print("")
-
-                                verificar_data = comparar_datas(data_hoje)  # Retorna True se as datas forem diferentes
-
-                                if verificar_data:
-                                    data_hoje = datetime.now().date()
-                                    folder = pasta_hoje_path(data_hoje)
-                                    print(f"Δ Criando pasta para data {data_hoje}")
-                                    pasta_hoje = criando_pasta_hoje(folder)
-                                    diretorio_hoje = folder
-                                    time.sleep(10)
-                                    if pasta_hoje:
-                                        print(f"Δ Pasta de hoje criada com sucesso: {folder}")
-                                        time.sleep(10)
-                                    else:
-                                        diretorio_hoje = SAVE_DIR
-                                        print("Δ Houve algum erro ao criar a pasta do dia de hoje.\n"
-                                              f"Δ Salvando no diretório: {diretorio_hoje}\n")
-                                        time.sleep(6)
 
                                 contador_segundos(30, f"para adquirir nova "
                                                       f"lista de emails na conta: {nome_arquivo}")
