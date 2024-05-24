@@ -1,6 +1,6 @@
 # BaixarAnexosGmail
 
-Apoie este projeto: [![Patrocine este projeto](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/BrunoBenvenutti)
+Apoie este projeto: [![Patrocine este projeto](https://img.shields.io/badge/-Sponsor-fafbfc?logo=GitHub%20Sponsors)](https://github.com/sponsors/brkas96)
 
 Feedback: brkas_dev@proton.me
 
