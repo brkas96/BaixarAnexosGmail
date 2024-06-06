@@ -1,0 +1,52 @@
+path
+inbox_notify = TRUE # Notifica quando o armazenamento do gmail chega a 70% cheio
+autodelet_read_emails = TRUE # Deleta todos emails lidos automaticamente, assim que virar o dia
+full_auto = TRUE # Faz tudo isso automaticamente, com apenas um comando no inicio
+
+
+Coisas a fazer:
+    # Verificar se ele está baixando todos os anexos corretamente sem corromper ou peder dados
+
+    # Implementar uma função para lidar com erro no processamento de algum email. Deixar o email com erro marcado
+      como não lido, separar em uma lista os ids dos emails com erro que não foram baixados os anexos.
+
+    # Verificar se ele marca os emails com anexo baixado como lidos corretamente e se deixa de marcar quando
+      acontece um erro.
+
+    # Implementar a função para escolher data, hora e ordem de download dos anexos
+
+    # Implementar tbm um alerta pra quando a caixa do gmail estiver com 70% cheia (pq mais que isso ja começa
+      dar problema). Pra eu não precisar entrar
+      no gmail para verificar o espaço utilizado. Vou tentar pegar o maximo de informações em uma unica
+      solitação sobre o armazenamento.
+
+    # Acho que vou juntar o programa de imap e api no mesmo software. Daí coloco uma opção pra escolher qual
+    tecnologia quero usar? Ou será melhor deixar separado mesmo? Ou então só exportar o programa como módulo,
+    deixando o da api como principal?É acho que vai ser melhor deixar os código separados e só importar o de
+    imap como um módulo ou então como um executavel a parte mesmo. Vou pensar...
+
+    # Implementar uma função para salvar temporariamente as infos da requisição a api do gmail, salvar em um txt
+    todas as ids e thread ids encontradas, e talvez eu coloque algumas infos a mais. Tenho que pegar a lista
+    diretamente da função search_messages e salvar o txt com a lista e todas informações. Talvez eu não salve só
+    de forma temporaria e sim permanente.
+
+    # Implementar tbm um print que mostre quantos emails estão na lista. Quantos emails foram encontrados naquela
+    requisição. Ele tem que contar somente emails com anexo, ou então contar todos e separar os com e sem
+    anexos. Assim eu vou saber quantos aenxos eu tenho que ter na minha pasta baixados.
+
+    # Estou com um problema, meu programa deixou de baixar 3 emails, pois o dia mudou antes de terminar de baixar
+    # os emails encontrados naquele dia, ou seja, deu meia noite e ainda faltava pegar 3 emails da lista do dia
+    # anterior. Tenho que resolver isso, fazendo com que o programa só passe para o proximo dia, após ter certeza
+    # que a lista de emials do dia anterior esta limpa.
+
+    #Tres coisas importantes para implementar: Primeiro, implementar a logica para que ele excluaos emails lidos
+    de todas as contas e não somente de uma conta por dia, ou seja, colocar a função de limpar emails em um loop,
+    até que todos emails sejam limpos em todas contas antes de continuar o processo de download de anexos.
+    Segundo, implementar a lógica para caso ele estiver baixando anexos e o dia virar, que ele só comece a baixar
+    anexos do próximo dia, após ter verificado se os anexos do dia anterior em todas as contas foram baixados
+    corretamente. Isso mesmo, ele tem que verificar se todos anexos foram baixados antes de virar o dia e criar
+    a proxima pasta. Terceiro, implementar a funcionalidade de baixar anexos de emails não lidos,desde o começo,
+    ou seja, escanear toda a conta e baixar anexos independente da data, porem separando eles nas pastas corretas
+    de suas respectivas datas. Isso vai ser meio chato de implementar eu acho.
+
+  
