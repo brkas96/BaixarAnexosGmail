@@ -409,7 +409,6 @@ def limpar_inbox(service):
         print("Δ Não foram encontrados emails a serem excluidos.")
         print("")
         time.sleep(3)
-        return False
 
 def ler_config(parametro):
     # Formato do parametro 'texto='
@@ -553,20 +552,46 @@ def main():
                     if auto_clear == 'TRUE' and dif_date > intervalo_data:
                         print(f"Δ Limpando emails lidos da caixa de entrada de {nome_arquivo}")
                         print("")
-                        clear = limpar_inbox(service)
-                        if clear:
-                            print(f"Δ Caixa de entrada de {nome_arquivo} foi limpa.")
-                            # atualiza o auto_clear_date para a data de hoje
+                        time.sleep(3)
+                        try:
+                            '''To tentando implementar uma lógica para que ele limpe todos os emails cadastrados
+                            e não somente um.'''
+                            for gmail in gmails:
+                                print(f"Limpando emails lidos de {gmail}")
+                                service = verificar_conta(gmail)
+                                limpar_inbox(service)
+                                print(f"Δ Caixa de entrada de {nome_arquivo} foi limpa.")
+                                time.sleep(5)
+                                # atualiza o auto_clear_date para a data de hoje
+                            print("Limpeza em todas as contas finalizada.")
+                            time.sleep(5)
                             escrever_config('auto_clear_date', datetime.now().date())
-                    else:
-                        pass
+                            time.sleep(5)
+                        except Exception as e:
+                            print(f"Erro ao tentar limpar inbox de {nome_arquivo}: {e}")
+                            time.sleep(5)
 
                     try:
                         while True:
+
                             verificar_data = comparar_datas(data_hoje)  # Retorna True se as datas forem diferentes
+
+                            # Pesquisar novos e-mails
+                            messages = filtro(service)
 
                             if verificar_data:
                                 data_hoje = datetime.now().date()
+
+                                '''Implementar uma solução para que o código continue a baixar anexos
+                                do dia anterior mesmo quando já tiver dado 00:00, pois sempre ficam alguns
+                                emails para trás. Verificar se ainda existem emails do dia anterior para terminar 
+                                a lista antes de ir para a do dia seguinte.
+                                Porém essa função só deve funcionar a partir do dia em que o programa foi executado
+                                A função deve cobrir o dia todo em que o programa foi executado, ou seja, a partir
+                                da meia noite do mesmo dia. Então se o usuario executar o programa as 23:59:59, o 
+                                programa vai baixar todos os anexos não baixados daquele dia, mesmo que o dia ja
+                                tenha virado.'''
+
                                 folder = pasta_hoje_path(data_hoje)
                                 print(f"Δ Criando pasta para data {data_hoje}")
                                 pasta_hoje = criando_pasta_hoje(folder)
@@ -580,9 +605,6 @@ def main():
                                     print("Δ Houve algum erro ao criar a pasta do dia de hoje.\n"
                                           f"Δ Salvando no diretório: {diretorio_hoje}\n")
                                     time.sleep(6)
-
-                            # Pesquisar novos e-mails
-                            messages = filtro(service)
 
                             if not messages:
                                 print("Δ Não foram encontrados emails não lidos no dia de hoje.")
@@ -633,6 +655,22 @@ def main():
                                     print(f"Δ Restam: {quantidade_email} e-mails")
                                 except Exception as e:
                                     print(f"Δ Erro ao marcar email como lido: {e}, email id:{ordem_lista['id']}")
+
+                                    error_mails = os.path.join("error_mails.txt")
+
+                                    # Verifica se o arquivo existe, e cria se não existir
+                                    if not os.path.exists(error_mails):
+                                        with open(error_mails, 'w'):
+                                            pass
+
+                                    print(f"Δ Erro ao marcar como lido: {e}")
+                                    with open(error_mails, 'a') as relatorio:
+                                        relatorio.write(f"Erro ao marcar email como lido: {e}\n")
+                                        relatorio.write(f"Data e hora do erro: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                                        relatorio.write(f"E-mail ID: {ordem_lista['id']}\n")
+                                        relatorio.write(125 * len("-"), "\n")
+                                        relatorio.write("")
+
                                     time.sleep(30)
                             messages.pop(int(ordem))
                         time.sleep(4)
